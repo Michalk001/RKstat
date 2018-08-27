@@ -30,6 +30,8 @@ namespace RKstat
 
         List<string> playersName = new List<string>();
 
+        ParseDate parseDate = new ParseDate();
+
         ParseHtml htmlParser = new ParseHtml();
         string urlRK = "https://www.krolestwa.com/FichePersonnage.php?login=";
         public RKStat(string phpsessid)
@@ -48,37 +50,36 @@ namespace RKstat
                                 .SelectNodes("//h1")[0].InnerText;
 
             player.Name = (playerName.Remove(0, playerName.IndexOf(':') + 1)).TrimStart(' ');
-            player.Province = GetValueByParagraf((int)TypeFieldNumber.Province);
+            player.Province = GetValueByParagraf((int)TypeFieldNumber.Province).Split(" ")[1];
             player.City = GetValueByParagraf((int)TypeFieldNumber.City);
-            player.Level = GetValueByParagraf((int)TypeFieldNumber.Level);
+            player.Level = GetValueByParagraf((int)TypeFieldNumber.Level).Split(" ")[1];
             player.WayScience = GetValueByParagraf((int)TypeFieldNumber.WayScience);
-            player.FaithPoints = GetValueByParagraf((int)TypeFieldNumber.FaithPoints);
-            player.Money = GetValueByParagraf((int)TypeFieldNumber.Money);
-            player.Active = isActive(GetValueByParagraf((int)TypeFieldNumber.Active))
-            
-            try
-            {
-                player.Workshop = (GetValueByParagraf((int)TypeFieldNumber.Workshop)).Split(' ').ToList()[2];
-            }
-            catch
-            {
-               
-            }
+            player.FaithPoints = GetValueByParagraf((int)TypeFieldNumber.FaithPoints).Split(" ")[0];
+            string money = GetValueByParagraf((int)TypeFieldNumber.Money).Remove(0,9);
+
+            player.Money = money.Remove(money.Length -7).Replace(" ","");
+
+            player.Active = IsActive(GetValueByParagraf((int)TypeFieldNumber.Active));
+
+            if ((GetValueByParagraf((int)TypeFieldNumber.Workshop)) != "")
+                player.Workshop = (GetValueByParagraf((int)TypeFieldNumber.Workshop)).Split(' ').ToList()[2].TrimEnd('.');
+            else
+                player.Workshop = "brak";
 
             if (GetValueByParagraf((int)TypeFieldNumber.Condition) == "")
             {
-                player.Condition = "true";
+                player.Condition = "żyje";
             }
             else
             {
-                player.Condition = GetValueByParagraf((int)TypeFieldNumber.Condition).Split(' ').ToList()[3].TrimEnd('.');
+                player.Condition = (GetValueByParagraf((int)TypeFieldNumber.Condition).Split(' ').ToList()[3]).TrimEnd('.');
             }
             playersData.Add(player);
         }
 
-        private string isActive(string rawDate)
+        private string IsActive(string rawDate)
         {
-            ParseDate parseDate = new ParseDate(); 
+            
 
             List<string> tmpDate = rawDate.Split(' ').ToList();
 
@@ -99,7 +100,7 @@ namespace RKstat
             {
              
                 htmlParser.SetDomain(urlRK + item);
-                htmlDoc = htmlParser.getHtml();
+                htmlDoc = htmlParser.GetHtml();
                 GetDataOfPlayer();         
             }
 

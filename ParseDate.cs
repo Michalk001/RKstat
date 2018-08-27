@@ -9,6 +9,10 @@ namespace RKstat
     {
         Dictionary<string, string> MonthToNumber = new Dictionary<string, string>();
 
+        public ParseDate()
+        {
+            SetMonth();
+        }
         private void SetMonth()
         {
             MonthToNumber.Add("stycznia", "01");
@@ -27,7 +31,7 @@ namespace RKstat
 
         public string GetDate(string day,string month,string year)
         {
-            SetMonth();
+    
             string date;
             date = day + "-";
             date +=  MonthToNumber[month] + "-";

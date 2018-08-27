@@ -36,7 +36,7 @@ namespace RKstat
             };
             cookieContainer.Add(cookie);
         }
-        public HtmlDocument getHtml()
+        public HtmlDocument GetHtml()
         {
             request.CookieContainer = cookieContainer;
             WebResponse webRespon =  request.GetResponse();
