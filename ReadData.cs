@@ -26,10 +26,10 @@ namespace RKstat
         }
         public string GetPlayerList()
         {
-            byte[] ee = new byte[file.Length];
-            file.Read(ee, 0, (int)file.Length);       
-            string a = Encoding.UTF8.GetString(ee);
-            return "";
+            byte[] players = new byte[file.Length];
+            file.Read(players, 0, (int)file.Length);
+            return Encoding.UTF8.GetString(players);
+            
         }
     }
 }
