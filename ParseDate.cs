@@ -31,7 +31,8 @@ namespace RKstat
 
         public string GetDate(string day,string month,string year)
         {
-    
+            if (day == "" || month == "" || year == "")
+                return "01-01-2000";
             string date;
             date = day + "-";
             date +=  MonthToNumber[month] + "-";

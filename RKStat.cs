@@ -33,7 +33,9 @@ namespace RKstat
         ParseDate parseDate = new ParseDate();
 
         ParseHtml htmlParser = new ParseHtml();
+
         string urlRK = "https://www.krolestwa.com/FichePersonnage.php?login=";
+
         public RKStat(string phpsessid)
         {
             htmlParser.SetCookie("PHPSESSID", phpsessid, "https://www.krolestwa.com");
@@ -43,14 +45,15 @@ namespace RKstat
         {
             playersName = players.Split(',').ToList();
         }
-        void GetDataOfPlayer()
+        void GetDataOfPlayer(string name)
         {
             Player player = new Player();
-            string playerName = htmlDoc.DocumentNode.SelectNodes("//div[@class='FPContentBlocInfosElem']")[0]
-                                .SelectNodes("//h1")[0].InnerText;
-
+            var playerNameTmp = htmlDoc.DocumentNode.SelectNodes("//div[@class='FPContentBlocInfosElem']");
+            if (playerNameTmp == null)
+                return;
+            string playerName = playerNameTmp[0].SelectNodes("//h1")[0].InnerText;
             player.Name = (playerName.Remove(0, playerName.IndexOf(':') + 1)).TrimStart(' ');
-            player.Province = GetValueByParagraf((int)TypeFieldNumber.Province).Split(" ")[1];
+            player.Province = GetValueByParagraf((int)TypeFieldNumber.Province);
             player.City = GetValueByParagraf((int)TypeFieldNumber.City);
             player.Level = GetValueByParagraf((int)TypeFieldNumber.Level).Split(" ")[1];
             player.WayScience = GetValueByParagraf((int)TypeFieldNumber.WayScience);
@@ -72,8 +75,21 @@ namespace RKstat
             }
             else
             {
-                player.Condition = (GetValueByParagraf((int)TypeFieldNumber.Condition).Split(' ').ToList()[3]).TrimEnd('.');
+              //  player.Condition = (GetValueByParagraf((int)TypeFieldNumber.Condition).Split(' ').ToList()[3]);
             }
+            string armyName = GetArmyName(GetOfficeLists());
+            if(armyName != null)
+            {
+                player.General = "true";
+                player.ArmyName = armyName;
+            }
+            else
+            {
+                player.General = "false";
+                player.ArmyName = "brak";
+            }
+
+
             playersData.Add(player);
         }
 
@@ -98,14 +114,41 @@ namespace RKstat
         {
             foreach(var  item in playersName)
             {
-             
+          
                 htmlParser.SetDomain(urlRK + item);
                 htmlDoc = htmlParser.GetHtml();
-                GetDataOfPlayer();         
+               
+               
+                GetDataOfPlayer(item);         
             }
 
         }
+        List<string> GetOfficeLists()
+        {
+            var tmp = htmlDoc.DocumentNode
+                .SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/p[4]/ul[1]/li");
+            if (tmp == null)
+                return null;
 
+
+            return tmp.Select(x => x.InnerText).ToList();
+        }
+
+        string GetArmyName(List<string> offices)
+        {
+            if (offices == null)
+                return null;
+            foreach(var item in offices)
+            {
+                
+                if (item.ToLower().Contains("dowódca"))
+                {
+                    return item.Replace("dowódca armii ","").Replace("\"", "");
+                }
+
+            }
+            return null;
+        }
         string GetValueByParagraf(int number)
         {
             var tmp = htmlDoc.DocumentNode.SelectNodes("//div[@class='FPContentBlocInfosElem']")[0]

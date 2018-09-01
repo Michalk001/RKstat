@@ -6,17 +6,18 @@ namespace RKstat
 {
     class Player
     {
-        public string Name;
-        public string Province;
-        public string City;
-        public string Level;
-        public string FaithPoints;
-        public string Money;
-        public string WayScience;
-        public string Active;
-        public string Workshop;
-        public string Condition;
-
+        public string Name { get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string Level { get; set; }
+        public string FaithPoints { get; set; }
+        public string Money { get; set; }
+        public string WayScience { get; set; }
+        public string Active { get; set; }
+        public string Workshop { get; set; }
+        public string Condition { get; set; }
+        public string General { get; set; }
+        public string ArmyName { get; set; }
 
     }
 }
