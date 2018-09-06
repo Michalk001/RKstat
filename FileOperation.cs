@@ -21,8 +21,8 @@ namespace RKstat
         public void Open()
         {
             file = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            fileRead = new StreamReader(file);
-            fileWrite = new StreamWriter(file);
+            fileRead = new StreamReader(file, Encoding.UTF8);
+            fileWrite = new StreamWriter(file, Encoding.UTF8);
             
         }
         public void Save(List<string> data)

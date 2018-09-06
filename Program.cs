@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace RKstat
 {
@@ -12,13 +13,11 @@ namespace RKstat
                 return -1 ;
             RKStat rKStat = new RKStat(Config.Instance.PHPSESSID);
             PlayerList playerList = new PlayerList();
-        
-
-            rKStat.CreatePlayerNameList(playerList.GetPlayerList());
+            rKStat.CreatePlayerNameList(playerList.GetPlayerList());   
             rKStat.CreatDataPlayers();
             PlayerDataSave playerDataSave = new PlayerDataSave(rKStat.playersData);
             playerDataSave.SaveArmyGeneral();
-           
+            playerDataSave.SaveAllDataPlayer();
             Console.ReadKey();
             return 0;
         }

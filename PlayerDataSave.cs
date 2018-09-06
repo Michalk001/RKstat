@@ -15,16 +15,40 @@ namespace RKstat
             file = new FileOperation();
             pathToSave = Config.Instance.PathSave;
         }
+
+
         public void SaveArmyGeneral()
         {
-            file.SetPath(pathToSave+"generalArmy-"+ GetDate()+".txt");
+            file.SetPath(pathToSave + "generalArmy-" + GetDate() + ".txt");
             file.Open();
-            file.Save(CreatPlayerStringData());
+            file.Save(CreatGeneralArmyStringData());
         }
 
-        private List<string> CreatPlayerStringData()
+        public void SaveAllDataPlayer()
+        {
+            file.SetPath(pathToSave + "allInfo-" + GetDate() + ".txt");
+            file.Open();
+            file.Save(CreateAllDataPlayer());
+        }
+
+        private List<string> CreateAllDataPlayer()
         {
             List<string> tmp = new List<string>();
+            tmp.Add("Name;Level;Money;Province;City;Condition;FaithPoints;General;ArmyName;WayScience;Workshop");
+            foreach (var item in playerList)
+            {
+                if (item != null)
+                    tmp.Add(item.Name + ";" + item.Level + ";" + item.Money + ";" + item.Province + ";" + item.City
+                        + ";" + item.Condition + ";" + item.FaithPoints + ";" + item.General + ";" + item.ArmyName + ";" + item.WayScience + ";" + item.Workshop);
+            }
+            return tmp;
+        }
+
+
+        private List<string> CreatGeneralArmyStringData()
+        {
+            List<string> tmp = new List<string>();
+            tmp.Add("Nick;ArmyName");
             foreach(var item in playerList)
             {
                 if(item.General == "true")
