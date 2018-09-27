@@ -24,20 +24,13 @@ namespace RKstat
 
     class RKStat
     {
-        
-        
+          
 
         public List<Player> playersData = new List<Player>();
 
         List<string> playersName = new List<string>();
 
     
-
-        public RKStat(string phpsessid)
-        {
-           
-
-        }
         public void CreatePlayerNameList(string players)
         {
             playersName = players.Split(',').ToList();
@@ -77,9 +70,16 @@ namespace RKstat
             
             while (!(thread.ThreadState == ThreadState.Stopped) || !(thread2.ThreadState == ThreadState.Stopped)) ;
 
-
-            }
-
-
         }
+
+        public bool PHPSessionCorrect()
+        {
+            DataOfPlayer dataOfPlayer = new DataOfPlayer();
+            var d = dataOfPlayer.GetDataOfPlayer("michalk001");
+            if (d != null)
+                return true;
+            return false;
+        }
+
+    }
 }

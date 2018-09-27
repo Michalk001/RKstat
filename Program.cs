@@ -10,8 +10,18 @@ namespace RKstat
             LoadConfig loadConfig = new LoadConfig();
             loadConfig.Load();
             if (Config.Instance.PHPSESSID == null || Config.Instance.PHPSESSID == "")
-                return -1 ;
-            RKStat rKStat = new RKStat(Config.Instance.PHPSESSID);
+            {
+                Console.WriteLine("PHPSession is empty");
+                Console.ReadKey();
+                return -1;
+            }
+            RKStat rKStat = new RKStat();
+            if (!rKStat.PHPSessionCorrect())
+            {
+                Console.WriteLine("PHPSession is wrong");
+                Console.ReadKey();
+                return -1;
+            }
             PlayerList playerList = new PlayerList();
             rKStat.CreatePlayerNameList(playerList.GetPlayerList());   
             rKStat.CreatDataPlayers();
