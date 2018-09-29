@@ -29,6 +29,7 @@ namespace RKstat
                     case "UrlProfile" : Config.Instance.UrlProfile = item.Value; break;
                     case "PathPlayer": Config.Instance.PathPlayer = item.Value; break;
                     case "PathSave": Config.Instance.PathSave = item.Value; break;
+                    case "PathLang": Config.Instance.PathLang = item.Value; break;
                 }
             }
       

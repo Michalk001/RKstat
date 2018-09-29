@@ -22,6 +22,6 @@ namespace RKstat
         public string UrlGame { get; set; }
         public string PathPlayer { get; set; }
         public string PathSave { get; set; }
-
+        public string PathLang { get; set; }
     }
 }
