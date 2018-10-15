@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Threading;
-
+using IniFile;
 namespace RKstat
 {
     class Program
     {
         static int Main(string[] args)
         {
-            LoadConfig loadConfig = new LoadConfig();
-            loadConfig.Load();
-            LoadLang loadLang = new LoadLang();
-            loadLang.Load();
+
+          
+            IniFile.IniFile iniFile = new IniFile.IniFile("config.txt");
+            var sectionINI = iniFile.Get("Config");
+
+            SetConfig.Instance.ConfigINI(iniFile.Get("Config"));
+            IniFile.IniFile langFile = new IniFile.IniFile(Config.Instance.PathLang);
+            SetConfig.Instance.LangINI(langFile.Get("ENG"));
+           
             if (Config.Instance.PHPSESSID == null || Config.Instance.PHPSESSID == "")
             {
                 Console.WriteLine($"{Lang.Instance.PHPSESSIDEmpty}");
@@ -35,5 +40,7 @@ namespace RKstat
             Console.ReadKey();
             return 0;
         }
+
+
     }
 }

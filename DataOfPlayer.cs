@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using RKstat.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,48 +9,51 @@ namespace RKstat
 {
     class DataOfPlayer
     {
-        ParseHtml htmlParser = new ParseHtml();
-        HtmlDocument htmlDoc;
+        private DownloadHTML downloadHTML;
+        private HtmlDocument htmlDoc;
+        private DataFromHTML dataFromHTML;
         public DataOfPlayer()
         {
-            htmlParser.SetCookie("PHPSESSID", Config.Instance.PHPSESSID, Config.Instance.UrlGame);
+            downloadHTML = new DownloadHTML();
+            downloadHTML.SetCookie("PHPSESSID", Config.Instance.PHPSESSID, Config.Instance.UrlGame);
         }
 
         public Player GetDataOfPlayer(string name)
         {
             Player player = new Player();
-            htmlParser.SetDomain(Config.Instance.UrlProfile + name);
-            htmlDoc = htmlParser.GetHtml();
-
-            var playerNameTmp = htmlDoc.DocumentNode.SelectNodes("//div[@class='FPContentBlocInfosElem']");
+            downloadHTML.SetDomain(Config.Instance.UrlProfile + name);
+            htmlDoc = downloadHTML.GetHtml();
+            dataFromHTML = new DataFromHTML(htmlDoc);
+            var playerNameTmp = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[2]/h1");
             if (playerNameTmp == null)
                 return null;
             string playerName = name;
             player.Name = (playerName.Remove(0, playerName.IndexOf(':') + 1)).TrimStart(' ');
-            player.Province = GetValueByParagraf((int)TypeFieldNumber.Province);
-            player.City = GetValueByParagraf((int)TypeFieldNumber.City);
-            player.Level = GetValueByParagraf((int)TypeFieldNumber.Level).Split(" ")[1];
-            player.WayScience = GetValueByParagraf((int)TypeFieldNumber.WayScience);
-            player.FaithPoints = GetValueByParagraf((int)TypeFieldNumber.FaithPoints).Split(" ")[0];
-            string money = GetValueByParagraf((int)TypeFieldNumber.Money).Remove(0, 9);
+            player.Province = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[3]/div[2]/p[2]/text()");
+            player.City = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[3]/div[2]/p[3]/text()");
+            player.Level = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[1]/text()");
+            player.WayScience = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[2]/text()");
+            player.FaithPoints = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[4]/text()").Split(" ")[0];
+            string money = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[5]/text()");
 
-            player.Money = money.Remove(money.Length - 7).Replace(" ", "");
+            player.Money = money;
 
-            player.Active = IsActive(GetValueByParagraf((int)TypeFieldNumber.Active));
+            player.Active = IsActive(dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[2]/p[3]"));
 
-            if ((GetValueByParagraf((int)TypeFieldNumber.Workshop)) != "")
-                player.Workshop = (GetValueByParagraf((int)TypeFieldNumber.Workshop)).Split(' ').ToList()[2].TrimEnd('.');
+            if ((dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[8]/p[1]")) != "")
+                player.Workshop = (dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[8]/p[1]")).Split(' ').ToList()[2].TrimEnd('.');
             else
                 player.Workshop = "brak";
 
-            if (GetValueByParagraf((int)TypeFieldNumber.Condition) == "")
+            if (dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[6]/span") == "")
             {
                 player.Condition = "żyje";
             }
             else
             {
-                player.Condition = (GetValueByParagraf((int)TypeFieldNumber.Condition).Split(' ').Last()).TrimEnd('.');
-                
+                player.Condition = (dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[6]/span").Split(' ').Last()).TrimEnd('.');
+
+
             }
             string armyName = GetArmyName(GetOfficeLists());
             if (armyName != null)
@@ -60,7 +64,7 @@ namespace RKstat
             else
             {
                 player.General = "false";
-                player.ArmyName = "brak";
+                player.ArmyName = "NoN";
             }
 
 
@@ -108,12 +112,6 @@ namespace RKstat
 
             }
             return null;
-        }
-        string GetValueByParagraf(int number)
-        {
-            var tmp = htmlDoc.DocumentNode.SelectNodes("//div[@class='FPContentBlocInfosElem']")[0]
-                          .SelectNodes("//p")[number].InnerText;
-            return System.Net.WebUtility.HtmlDecode((tmp.Remove(0, tmp.IndexOf(":") + 1)).TrimStart(' '));
         }
     }
 }

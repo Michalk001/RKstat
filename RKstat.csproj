@@ -10,4 +10,10 @@
     <PackageReference Include="SoftwareKobo.Net.WebUtility" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="IniFile">
+      <HintPath>..\..\DLL\IniFile\IniFile\bin\Release\netstandard2.0\IniFile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -32,7 +32,7 @@ namespace RKstat
             {
                 fileWrite.WriteLine(item);
                 fileWrite.Flush();
-                
+                    
             }
         }
         
