@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace RKstat
+namespace RKstat.Models
 {
     class FileOperation
     {

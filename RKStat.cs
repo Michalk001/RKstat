@@ -73,8 +73,15 @@ namespace RKstat
 
         public bool PHPSessionCorrect()
         {
-            DataOfPlayer dataOfPlayer = new DataOfPlayer();
-            var d = dataOfPlayer.GetDataOfPlayer("michalk001");
+            HTTPClient.src.Model.Get clientGet = new HTTPClient.src.Model.Get();
+            clientGet.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            clientGet.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            clientGet.ContentType = "application/x-www-form-urlencoded";
+            clientGet.SetCookie("PHPSESSID", Config.Instance.PHPSESSID, Config.Instance.UrlGame);
+            var tasks = clientGet.GetAsync(PlayersURL(Config.Instance.UrlProfile, new List<string> { "michalk001" }));
+            Task.WaitAll(tasks);
+            ParseHTML parseHTML = new ParseHTML();
+            var d = parseHTML.GetPlayer(tasks.Result[0].Content);
             if (d != null)
                 return true;
             return false;

@@ -4,9 +4,10 @@ App parse player profiles and save to txt file obtained data.
 
 Befor first start you must create config.txt file in main folder where is .exe file.
 
-Example config.txt:
+Example config.ini:
 
 ```
+[CONFIG] ; Section name 
 PHPSESSID= Your PHPSESSID from cookies browers.
 UrlProfile=https://www.krolestwa.com/FichePersonnage.php?login=
 UrlGame=https://www.krolestwa.com/
@@ -20,6 +21,7 @@ UrlProfile and UrlGame must be like Example. Nowadays app work only Polish url.
 Example lang file:
 
 ```
+[LANG]; Section name
 PHPSESSIDCorrect=PHPSession is correct
 PHPSESSIDEmpt=PHPSession is empty
 PHPSESSIDWrongy=PHPSession is wrong
@@ -30,6 +32,8 @@ DownloadProfileStart=Download player profile...
 App save result in one file per day overwriting last file of the day.  
 
 Player list file:
-
+```
+playerOne,playerTwo
+```
 This app use ","(Comma) to separet between players. Other char to separet are not supported.
 
