@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace RKstat
 {
@@ -29,47 +30,44 @@ namespace RKstat
 
         public List<Player> playersData = new List<Player>();
 
-        List<string> playersName = new List<string>();
+        List<string> playerNames = new List<string>();
 
     
         public void CreatePlayerNameList(string players)
         {
-            playersName = players.Split(',').ToList();
+            playerNames = players.Split(',').ToList();
         }
        
-
+        private List<string> PlayersURL(string url, List<string> names)
+        {
+            List<string> tmp = new List<string>();
+            foreach(var item in names)
+            {
+                tmp.Add(url + "="+ item);
+            }
+            return tmp;
+        }
         
-        public  void CreatDataPlayers()
+        public void CreatDataPlayers()
         {
 
-            Thread thread = new Thread(() =>
-            {
-                foreach (var item in playersName.Skip(playersName.Count() / 2))
-                {
-                    DataOfPlayer dataOfPlayer = new DataOfPlayer();
-                    var d = dataOfPlayer.GetDataOfPlayer(item);
-                    if (d != null)
-                        playersData.Add(d);
-                    Thread.Sleep(200);
-                }
-                
-            });         
-            Thread thread2 = new Thread(() =>
-            {
-                foreach (var item in playersName.Take((playersName.Count() / 2)))
-                {
-                    DataOfPlayer dataOfPlayer = new DataOfPlayer();
-                    var d = dataOfPlayer.GetDataOfPlayer(item);
-                    if (d != null)
-                        playersData.Add(d);
-                    Thread.Sleep(200);
-                    }
-            });
+
+
+            HTTPClient.src.Model.Get clientGet = new HTTPClient.src.Model.Get();
+            clientGet.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            clientGet.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            clientGet.ContentType = "application/x-www-form-urlencoded";
+            clientGet.SetCookie("PHPSESSID", Config.Instance.PHPSESSID, Config.Instance.UrlGame);
+            var tasks = clientGet.GetAsync(PlayersURL(Config.Instance.UrlProfile, playerNames));
+
+            Task.WaitAll(tasks);
             
-            thread.Start();
-            thread2.Start();
-            
-            while (!(thread.ThreadState == ThreadState.Stopped) || !(thread2.ThreadState == ThreadState.Stopped)) ;
+            foreach(var item in tasks.Result)
+            {
+                ParseHTML parseHTML = new ParseHTML();
+                playersData.Add(parseHTML.GetPlayer(item.Content));
+            }
+   
 
         }
 

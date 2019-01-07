@@ -4,4 +4,6 @@ obj/
 
 Data/
 
-config.txt
+config.ini
+.vs
+.git

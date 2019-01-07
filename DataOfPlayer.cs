@@ -21,7 +21,7 @@ namespace RKstat
         public Player GetDataOfPlayer(string name)
         {
             Player player = new Player();
-            downloadHTML.SetDomain(Config.Instance.UrlProfile + name);
+            downloadHTML.SetDomain(Config.Instance.UrlProfile +"="+ name);
             htmlDoc = downloadHTML.GetHtml();
             dataFromHTML = new DataFromHTML(htmlDoc);
             var playerNameTmp = dataFromHTML.GetTextFromNode("//*[@id='FPcontentBlocInfos']/div[2]/h1");

@@ -9,12 +9,12 @@ namespace RKstat
         {
 
           
-            IniFile.IniFile iniFile = new IniFile.IniFile("config.txt");
+            IniFile.IniFile iniFile = new IniFile.IniFile("config.ini");
             var sectionINI = iniFile.Get("Config");
 
-            SetConfig.Instance.ConfigINI(iniFile.Get("Config"));
+            SetConfig.Instance.ConfigINI(iniFile.Get("CONFIG"));
             IniFile.IniFile langFile = new IniFile.IniFile(Config.Instance.PathLang);
-            SetConfig.Instance.LangINI(langFile.Get("ENG"));
+            //SetConfig.Instance.LangINI(langFile.Get("ENG"));
            
             if (Config.Instance.PHPSESSID == null || Config.Instance.PHPSESSID == "")
             {

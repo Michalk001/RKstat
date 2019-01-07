@@ -3,16 +3,20 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject>RKstat.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.8.7" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.11" />
     <PackageReference Include="SoftwareKobo.Net.WebUtility" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="HTTPClient">
+      <HintPath>G:\git\DLL\HTTPClient\bin\Release\netstandard2.0\HTTPClient.dll</HintPath>
+    </Reference>
     <Reference Include="IniFile">
-      <HintPath>..\..\DLL\IniFile\IniFile\bin\Release\netstandard2.0\IniFile.dll</HintPath>
+      <HintPath>G:\git\DLL\IniFile\IniFile\obj\Debug\netstandard2.0\IniFile.dll</HintPath>
     </Reference>
   </ItemGroup>
 
