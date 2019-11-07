@@ -33,11 +33,11 @@ namespace RKstat.Models
             if ((parseHTML.GetStringFromNode("//*[@id='FPcontentBlocInfos']/div[8]/p[1]")) != "")
                 player.Workshop = (parseHTML.GetStringFromNode("//*[@id='FPcontentBlocInfos']/div[8]/p[1]")).Split(' ').ToList()[2].TrimEnd('.');
             else
-                player.Workshop = "brak";
+                player.Workshop = "";
 
             if (parseHTML.GetStringFromNode("//*[@id='FPcontentBlocInfos']/div[6]/p[6]/span") == "")
             {
-                player.Condition = "żyje";
+                player.Condition = "live";
             }
             else
             {
@@ -45,7 +45,7 @@ namespace RKstat.Models
 
 
             }
-            string armyName = null;
+            string armyName = GetArmyName(GetOfficeLists(parseHTML));
             if (armyName != null)
             {
                 player.General = "true";
@@ -54,7 +54,7 @@ namespace RKstat.Models
             else
             {
                 player.General = "false";
-                player.ArmyName = "NoN";
+                player.ArmyName = "";
             }
 
 
@@ -77,16 +77,15 @@ namespace RKstat.Models
                 return "false";
 
         }
-        /*List<string> GetOfficeLists()
+        List<string> GetOfficeLists(HTTPClient.src.Model.ParseHTML parseHTML)
         {
-            var tmp = htmlDoc.DocumentNode
-                .SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/p[4]/ul[1]/li");
+            var tmp = parseHTML.GetNode("/html[1]/body[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/p[4]/ul[1]/li");
             if (tmp == null)
                 return null;
 
 
             return tmp.Select(x => x.InnerText).ToList();
-        }*/
+        }
 
         string GetArmyName(List<string> offices)
         {

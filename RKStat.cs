@@ -54,6 +54,7 @@ namespace RKstat
 
 
             HTTPClient.src.Model.Get clientGet = new HTTPClient.src.Model.Get();
+            clientGet.Delay = 500;
             clientGet.AddHeader("Accept-Encoding", "gzip, deflate, br");
             clientGet.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
             clientGet.ContentType = "application/x-www-form-urlencoded";

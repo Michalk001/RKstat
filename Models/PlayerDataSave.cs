@@ -34,8 +34,10 @@ namespace RKstat.Models
 
         private List<string> CreateAllDataPlayer()
         {
-            List<string> tmp = new List<string>();
-            tmp.Add("Name;Level;Money;Province;City;Condition;FaithPoints;General;ArmyName;WayScience;Workshop");
+            List<string> tmp = new List<string>
+            {
+                "Name;Level;Money;Province;City;Condition;FaithPoints;General;ArmyName;WayScience;Workshop"
+            };
             foreach (var item in playerList)
             {
                 if (item != null)
@@ -48,12 +50,15 @@ namespace RKstat.Models
 
         private List<string> CreatGeneralArmyStringData()
         {
-            List<string> tmp = new List<string>();
-            tmp.Add("Nick;ArmyName");
-            foreach(var item in playerList)
+            List<string> tmp = new List<string>
             {
-                if(item.General == "true")
-                tmp.Add(item.Name+";"+item.ArmyName);
+                "Nick;ArmyName"
+            };
+            foreach (var item in playerList)
+            {
+                if(item != null)
+                    if(item.General == "true")
+                        tmp.Add(item.Name+";"+item.ArmyName);
             }
             return tmp;
         }

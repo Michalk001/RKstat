@@ -21,7 +21,7 @@ namespace RKstat.Models
             {
                 foreach(var item in Data)
                 {
-                    playerList += item;
+                    playerList += item.Replace('"',' ').Trim(' ');
                 }
                 return playerList.Replace(" ","");
             }
