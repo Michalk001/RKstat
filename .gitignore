@@ -5,3 +5,7 @@ obj/
 Data/
 
 config.txt
+
+.vs
+config.ini
+pla.txt
