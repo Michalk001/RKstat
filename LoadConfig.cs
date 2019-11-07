@@ -12,7 +12,7 @@ namespace RKstat
         public LoadConfig()
         {
             file = new FileOperation();
-            file.SetPath("config.ini");
+            file.SetPath("config.txt");
             file.Open();
         }
 
