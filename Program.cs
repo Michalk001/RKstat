@@ -7,6 +7,7 @@ namespace RKstat
     {
         static int Main(string[] args)
         {
+            Console.WriteLine("Start");
             LoadConfig loadConfig = new LoadConfig();
             loadConfig.Load();
             if (Config.Instance.PHPSESSID == null || Config.Instance.PHPSESSID == "")

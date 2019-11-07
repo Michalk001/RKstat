@@ -38,27 +38,31 @@ namespace RKstat
         }
         public HtmlDocument GetHtml()
         {
-            request.CookieContainer = cookieContainer;
-            WebResponse webRespon =  request.GetResponse();
-            HttpWebResponse response = (HttpWebResponse)webRespon;
-            string html;
-            if (response != null)
+            try
             {
-                if (response.StatusCode == HttpStatusCode.OK)
+                request.CookieContainer = cookieContainer;
+                WebResponse webRespon = request.GetResponse();
+                HttpWebResponse response = (HttpWebResponse)webRespon;
+                string html;
+                if (response != null)
                 {
-                    Stream stream = response.GetResponseStream();
-                    using (StreamReader reader = new StreamReader(stream))
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        html = reader.ReadToEnd();
-                    }
-                    HtmlDocument htmlDocument = new HtmlDocument();
-                    htmlDocument.LoadHtml(html);
-                    return htmlDocument;
+                        Stream stream = response.GetResponseStream();
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            html = reader.ReadToEnd();
+                        }
+                        HtmlDocument htmlDocument = new HtmlDocument();
+                        htmlDocument.LoadHtml(html);
+                        return htmlDocument;
 
+
+                    }
 
                 }
-
             }
+            catch { }
             return null;
 
         }
